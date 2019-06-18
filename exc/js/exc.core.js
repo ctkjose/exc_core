@@ -1,5 +1,5 @@
 (function(d){
-	
+	//jose
 	self.core = self.core || {};
 
 	core.ready = function(fn){
