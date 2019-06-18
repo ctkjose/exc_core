@@ -1,0 +1,156 @@
+
+
+.dtp {
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-around;
+
+	align-items: center;
+	padding: 4px 4px;
+
+}
+
+.dtp .ra, .dtp .la, .dtp .v {
+	flex-basis: auto;
+
+}
+.dtp .v {
+	flex-grow: 4;
+	text-align: center;
+}
+
+.dtp .la {
+	flex-shrink: 0;
+	flex-grow: 0;
+	text-align: center;
+}
+.dtp .ra {
+	flex-shrink: 0;
+	flex-grow: 0;
+	text-align: center;
+}
+
+.dtp .ra i,
+.dtp .la i {
+	font: normal normal normal 16px/1 LineAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.dtp .ra i:after {
+	content: "\f112";
+}
+.dtp .la i:before {
+	content: "\f111";
+}
+
+.dtp.vm {
+	background-color: #fd4741;
+	color: #ffffff;
+}
+.dtp.vm .v {
+	font-size: 1.2em;
+
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.dtp.vm .ra,
+.dtp.vm .la {
+	line-height: 1.2em;
+	height: 1.2em;
+}
+.dtp.vd {
+
+	box-shadow: 0 1px rgba(0, 0, 0, 0.06);
+}
+.dtp.vd .v {
+	overflow-y: hidden;
+}
+.dtp.vd .v .vdn {
+	display: block;
+	font-size: 3em;
+	font-weight: 700;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.dtp.vd .v .vdw {
+	display: block;
+	color: #fd4741;
+	font-size: 0.8em;
+
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.dtp.vd .ra,
+.dtp.vd .la {
+	color: #cccccc;
+}
+
+.dtp.vy {
+	box-shadow: 0 1px rgba(0, 0, 0, 0.06);
+}
+.dtp.vy .ra,
+.dtp.vy .la {
+	color: #cccccc;
+}
+.dtp.vy .v {
+	outline: none;
+}
+
+.dtp.ok {
+	background-color: #F6F6F6;
+}
+.dtp .ok,
+.dtp .cancel,
+.dtp .cal {
+	color: #fd4741;
+}
+.dtp i {
+	font: normal normal normal 16px/1 LineAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	font-size: 1.5em;
+
+}
+.dtp .ok i:before {
+	content: "\f17b";
+}
+.dtp .cancel i:before {
+	content: "\f191";
+}
+.dtp .cal i:before {
+	content: "\f15c";
+}

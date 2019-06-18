@@ -1,0 +1,51 @@
+.check {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	outline: none;
+	cursor: pointer;
+}
+.check .check-mark {
+	background-color: transparent;
+	border: 2px solid #ccc;
+	border-radius: 50%;
+	cursor: pointer;
+	
+	position: relative;
+	width: 1.5em;
+	height: 1.5em;
+	
+	transition: 0.15s all ease-out; 
+}
+.check .check-mark ~ span {
+	margin-left: 10px;
+	pointer-events: none;
+	cursor: pointer;
+}
+.check .check-mark:after {
+	border: 2px solid #1FA3EC;
+	border-top: none;
+	border-right: none;
+	
+	content: "";
+	opacity: 0;
+	position: absolute;
+	
+	top: .30em;
+	left: .28em;
+	width: .75em;
+	height: .45em;
+	
+	transform: rotate(-45deg);
+	transition: 0.15s all ease-out; 
+}
+.check .check-mark:active {
+	background-color: rgba(32,32,32, .1);
+}
+.check.is-active .check-mark {
+	border-color: #1FA3EC;
+}
+.check.is-active .check-mark:after {
+	opacity: 1;
+}

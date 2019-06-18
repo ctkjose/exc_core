@@ -1,0 +1,178 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Test for exc.dom.js Core</title>
+
+	
+	<script type='text/javascript'>
+	</script>
+
+	<style type="text/css">
+		body, html {
+			box-sizing: border-box;
+			padding: 0 0;
+			margin: 0 0;
+		 }
+		.appls {
+			box-sizing: border-box;
+			position: absolute;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			background-color: #2C2C33;
+
+			z-index: 99999;
+			height: 100vh;
+			width: 100vw;
+			left: 0;
+			top: 0;
+		}
+		.appls .spinner {
+			height: 200px;
+			width: 200px;
+			animation: rotate 2s linear infinite;
+			transform-origin: center center;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			margin: auto;
+		}
+		.appls .msg {
+			position: absolute;
+			bottom: 20px;
+			text-align: center;
+			color: #fff;
+			font-family: sans-serif;
+			font-size: 14px;
+		}
+		.appls .spinner .path {
+			stroke-dasharray: 1, 200;
+			stroke-dashoffset: 0;
+			animation: dash 1.5s ease-in-out infinite;
+			stroke-linecap: round;
+			stroke: #fff;
+		}
+		.appls .logo {
+			font-family: sans-serif;
+			font-size: 16px;
+			color: #fff;
+		}
+		@keyframes rotate {
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+		@keyframes dash {
+			0% {
+				stroke-dasharray: 1, 200;
+				stroke-dashoffset: 0;
+			}
+			50% {
+				stroke-dasharray: 89, 200;
+				stroke-dashoffset: -35px;
+			}
+			100% {
+				stroke-dasharray: 89, 200;
+				stroke-dashoffset: -124px;
+			}
+		}
+	</style>
+</head>
+<body>
+<div class="appls">
+	<div class="logo">Loading...</div>
+	<svg class="spinner" viewBox="25 25 50 50">
+	<circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+	</svg>
+	<div class="msg"></div>
+</div>
+<h2>Greetings</h2>
+<div class="container" name="e0">
+  <div class="inner e1" name="e1">Hello</div>
+  <div class="inner e2" name="e2">Goodbye</div>
+</div>
+
+<form>
+<input type="checkbox" name='check2' value='jose1'/> 
+<input type="checkbox" name='check1' value='jose2'/><br>
+<input type='test' name="q" value='' placeholder='here...'><br>
+<select name='s1'>
+  <option value='v1'>value 1</option>
+  <option value='v2'>value 2</option>
+</select>
+<button id="btn1" class="j">Click</button>
+<button id="btn2" class="j" style="display: none;">Click</button>
+
+<div><p>Hello</p></div>
+<div class="pt2"><div class='pt1' ><p class='pta'>Parent Test 1</p><p class='ptb'>Parent Test 2</p></div></div>
+</form>
+
+<script type='text/javascript' src='../exc/js/exc.dom.js'></script>
+<script type='text/javascript' src='../exc/js/exc.core.js'></script>
+<script type='text/javascript' src='../exc/js/exc.app.js'></script>
+
+
+<script>
+
+
+
+
+
+</script>
+<script1>
+	n = $.get(".container");
+
+self.app = {
+	opSessionName: "myAddData",
+	manifest: {
+		includes: [
+			{url: "test1.js", wait: true},
+			{url: "../css/test1.css"},
+			{url: "test_controller1.js", wait: true, cache:false, controller: "testController1"}
+		],
+		interactions: [
+			{cmd:"redirect1", args: ["http://localhost/exc_core/tests/test_exc_core2.html?tested_redirect", "Hello Jose"]},
+			{cmd: "alert1", args: ["Hello Jose"]}
+		]
+	},
+	initialize: function(){
+		//called to initialize this controller instance
+		console.log("@app.initialize()");
+
+		//During initialization be careful when making assumptions about what other things are loaded and available.
+		//Only guarantee is that this object and its related scope is ready.
+	},
+	onRun: function(){
+		//called to start an application
+		console.log("@app.onRun()");
+		return true; //return false to cancel application run
+	},
+	onLoadFailed: function(){
+		//called if loading of app failed
+		alert("Sorry unable to load this application. Please resfresh or try later.");
+	},
+	event_Test: function(){
+		//finish loading all of my manifest contents
+		console.log("@app.eventManifestCompleted()");
+	}
+};
+
+	document.addEventListener('appInit', function(e){
+		console.log("got appInit...");
+		console.log("app=%o", e.app);
+
+	}, true);
+
+	function fnCallback(){
+		console.log("Called fnCallback ---------------------");
+		console.log(arguments);		
+	}
+	
+
+</script1>
+</body>
+</html>

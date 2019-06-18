@@ -1,0 +1,40 @@
+BUILD SASS
+
+sass /Library/WebServer/Documents/exc_core/exc/scss/core.scss /Library/WebServer/Documents/exc_core/exc/css/exc.css
+
+var event = document.createEvent('Event');
+		event.initEvent('appInit', true, true);
+		event.app = app;
+		document.dispatchEvent(event);
+
+
+
+Use a state for a server to
+
+- add includes
+- add a controller as JS code
+- interactions
+
+
+Controller Loading
+
+When app controller is loading, all other controllers already loaded will wait for the app to initialize before getting their `initialize` call.
+If a controller is loaded after the app is running, the `initialize` will be called right away, this controller will not wait for other controllers added by its own manifest.
+
+
+self.app = {
+	manifest: {
+			includes: [
+				{url: "test1.js", wait: true},
+				{url: "../css/test1.css"}
+			]
+	}
+
+
+};
+
+core.ready(function(){
+
+	app
+
+});

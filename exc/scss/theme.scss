@@ -1,0 +1,62 @@
+$theme-panel-color-lightgrey-fill: #F8F8F8;
+$theme-panel-color-lightgrey-border: #ddd;
+$theme-panel-color-lightgrey-text: #000;
+
+$theme-panel-color-darkgrey-fill: #AEAEAE;
+$theme-panel-color-darkgrey-border: #969696;
+$theme-panel-color-dark-text: #ffffff;
+
+$theme-panel-color-dark-fill: #3F4041;
+$theme-panel-color-dark-border: #333434;
+$theme-panel-color-dark-text: #ffffff;
+
+
+/*fill, border, text, hover-text, hover-fill, hover-text, active-fill, active-text*/
+$theme-panels:
+	("grey", #F5F4F5, #DDDDDD, #000000, #007BFF, #DAE0E5, #007BFF, #DAE0E5, #007BFF),
+	("darkgrey", #AEAEAE, #969696, #000000, #007BFF, #DAE0E5, #007BFF,#DAE0E5, #007BFF),
+	("dark", #3F4041, #333434, #FFFFFF, #FFFFFF, #4A4D4E, #FFFFFF, #288EDF, #FFFFFF),
+;
+
+/*buttons */
+
+$theme-button-default-color-text: #525456;
+$theme-button-default-color-bg: #E9E8E8;
+
+/*text, fill*/
+$theme-buttons:
+	("blue", #FFFFFF, #1FA3EC),
+	("red", #FFFFFF, #DC3545),
+	("green", #FFFFFF, #21BA45),
+	("orange", #FFFFFF, #FAA732),
+	("dark", #FFFFFF, #6C757D)
+;
+
+
+/*sidebar menu */
+/*fill, border, text, hover-text, hover-fill, hover-text, active-fill, active-text*/
+$theme-menu-sidebar: (#3F4041, #333434, #FFFFFF, #FFFFFF, #4A4D4E, #FFFFFF, #288EDF, #FFFFFF);
+
+
+/*forms*/
+
+$theme-action-text-color-hover: #1FA3EC;
+$theme-action-text-color: #7B7B7B;
+
+$theme-fld-label-width: 120px;
+$theme-fld-label-max-width: 220px;
+
+$theme-fld-color-text: #000;
+$theme-fld-color-border: #ced4da;
+$theme-fld-color-background: #fff;
+
+$theme-fld-focus-color-border: #4C9AFF;
+$theme-fld-focus-color-shadow: #4C9AFF;
+
+$theme-fld-error-color-border: #ff3860;
+$theme-fld-error-color-shadow: #ff3860;
+
+
+
+$theme-fld-disable-color-border: #ced4da;
+$theme-fld-disable-color-background: #e9e9e9;

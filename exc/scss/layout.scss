@@ -1,0 +1,26 @@
+
+
+
+
+
+body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 100vh;
+}
+
+
+.exc-contents {
+	display: flex;
+	flex-direction: row;
+	min-height: 100vh;
+	align-items: flex-start;
+	justify-content: center;
+	
+}
+
+.exc-header.is-fixed + .exc-contents {
+	padding-top: $header-hight-fixed;
+}
+

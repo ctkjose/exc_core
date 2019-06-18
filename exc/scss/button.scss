@@ -1,0 +1,263 @@
+
+/**
+ * BUTTONS
+ */
+
+.btn {
+	position: relative;
+	line-height: $text-line-height;
+
+	display: inline-block;
+
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+
+	font-size: 1em;
+	font-weight: 400;
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+
+	border: 1px solid transparent;
+	border-radius: .25rem;
+
+	padding: .5em .75em;
+
+	transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    -ms-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+	text-decoration: none;
+
+
+	& + .btn {
+		margin-left: 10px;
+
+		&.is-block {
+			margin: 1rem 0;
+		}
+	}
+	.exc-app-menu & {
+		margin-top: -7px;
+	}
+
+	&:active {
+		
+	}
+	&.is-disabled {
+		cursor: not-allowed;
+		opacity: .50;
+	}
+	&.is-block {
+		display: block;
+	}
+	
+	&.with-pill-badge .pill {
+		position: absolute;
+		padding: .25em .35em;
+		right: -.50em;
+		top: -.50em;
+	}
+	
+	& > .la, & > .fa {
+		font-size: 1.2rem;
+	}
+	
+	$color-bg: $theme-panel-color-lightgrey-fill;
+	$color-hover: darken($color-bg, 10);
+	$color-active: darken($color-hover, 10);
+	
+	color: $theme-button-default-color-text;
+	background-color: $color-bg;
+			
+	
+	&.is-outline {
+		background-color: transparent;
+	}
+	&:not(.is-disabled):not(.is-busy){
+		&:hover {
+			background-color: $color-hover;
+			&.is-outline.is-mute {
+				background-color: transparent;
+			}
+		}
+		&:active {
+			background-color: $color-active;
+		}
+	}
+	
+	/*fill, border, text, hover-fill, hover-border,hover-text, active-fill, active-border, active-text*/
+	@each $color-name, $color-text, $color-bg in $theme-buttons {
+		$color-hover: darken($color-bg, 5);
+		$color-active: darken($color-hover, 5);
+	
+		&.#{$color-name} {
+			color: $color-text;
+			background-color: $color-bg;
+			
+			&.is-busy {
+				background-color: lighten($color-bg, 10%);
+			}
+			&.is-outline {
+				background-color: transparent;
+				color: $color-bg;
+			}
+		
+			&:not(.is-disabled):not(.is-busy){
+				&:hover {
+					background-color: $color-hover;
+					&.is-outline {
+						color: $color-text;
+						&.is-mute {
+							background-color: transparent;
+						}
+					}
+				}
+				&:active {
+					background-color: $color-active;
+					&.is-outline {
+						color: $color-text;
+					}
+				}
+			}
+		}
+		
+	}
+
+	&.is-busy {
+		cursor: wait;
+		background-image: url('data:image/svg+xml,<svg version="1.1" id="L4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">    <circle fill="#fff" stroke="none" cx="6" cy="50" r="6">      <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.1"></animate>        </circle>    <circle fill="#fff" stroke="none" cx="26" cy="50" r="6">      <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.2"></animate>           </circle>    <circle fill="#fff" stroke="none" cx="46" cy="50" r="6"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.3"></animate></circle></svg>');
+		background-position: center right;
+		background-size: 32px 32px;
+		background-repeat: no-repeat;
+		padding-right: 36px;
+	}
+	
+}
+
+a.btn,
+button.btn {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+	
+.btn-group {
+	position: relative;
+	vertical-align: middle;
+	display: inline-flex;
+	border-radius: .25rem;
+	
+	
+	&.is-block {
+		display: flex;
+		& >.btn {
+			flex-grow: 1;
+		}
+	}
+	
+	& >.btn {
+		position: relative;
+		flex: 0 1 auto;
+		margin-left: 0;
+		margin-right: 0;
+		
+		border: 1px solid #dddddd;
+	}
+	& >.btn + .btn {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	& > .btn:first-child {
+		margin-left: 0;
+		margin-right: 0;
+		border-right: 0;
+		border-bottom-right-radius: 0;
+		border-top-right-radius: 0;
+	}
+	& > .btn:last-child {
+		margin-right: 0;
+		border-left: 0;
+		border-bottom-left-radius: 0;
+		border-top-left-radius: 0;
+	}
+	& >.btn:not(:first-child):not(:last-child) {
+		margin-left: 0;
+		margin-right: 0;
+		margin-left: -1px;
+		border-radius: 0;
+	}	
+}
+
+.btn > * {
+	 pointer-events: none;
+}
+.btn-tab-group {
+	position: relative;
+	vertical-align: middle;
+	display: flex;
+	justify-content: flex-start;
+	border-bottom: 1px solid #dddddd;
+	padding-left: 6px;
+
+	& >.btn {
+		color: #555555;
+		cursor: default;
+		background-color: #ffffff;
+		border: 1px solid #dddddd;
+		
+		margin-left: 0;
+		margin-right: 0;
+		
+		margin-bottom: -1px;
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+
+		&.is-active {
+			border-bottom-color: transparent;
+		}
+		
+	}
+
+
+	& >.btn:not(:first-child) {
+		margin-left: 3px;
+	}
+		
+}
+
+@each $breakpoint in $layout-breakpoints {
+  $name: nth($breakpoint, 1);
+  $smin: nth($breakpoint, 2);
+  $smax: nth($breakpoint, 3);
+  
+   @media only screen and (min-width: $smin) and (max-width: $smax) {
+
+		.btn {	
+			&.is-block-#{$name} {
+				display: block;
+			}
+			
+			& + .btn.is-block-#{$name}{
+				margin: 1rem 0;
+			}
+		}
+		.btn-group {
+			&.is-block-#{$name} {
+				display: flex;
+				& >.btn {
+					flex-grow: 1;
+				}
+			}
+		}
+   }
+}
+

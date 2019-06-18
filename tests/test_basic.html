@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Test for exc.dom.js Core</title>
+	<script type='text/javascript' src='../src/exc.dom.js'></script>
+	<script type='text/javascript' src='../src/exc.core.js'></script>
+	<script type='text/javascript' src='../exc/exc.app.js'></script>
+	
+	<script type='text/javascript'>
+	</script>
+</head>
+<body>
+<h2>Greetings</h2>
+<div class="container" name="e0">
+  <div class="inner e1" name="e1">Hello</div>
+  <div class="inner e2" name="e2">Goodbye</div>
+</div>
+
+<form>
+<input type="checkbox" name='check2' value='jose1'/> 
+<input type="checkbox" name='check1' value='jose2'/><br>
+<input type='test' name="q" value='' placeholder='here...'><br>
+<select name='s1'>
+  <option value='v1'>value 1</option>
+  <option value='v2'>value 2</option>
+</select>
+<button id="btn1" class="j">Click</button>
+<button id="btn2" class="j" style="display: none;">Click</button>
+
+<div><p>Hello</p></div>
+<div class="pt2"><div class='pt1' ><p class='pta'>Parent Test 1</p><p class='ptb'>Parent Test 2</p></div></div>
+</form>
+
+<script>
+	n = $.get(".container");
+
+	document.addEventListener('appInit', function(e){
+		console.log("got appInit...");
+		console.log("app=%o", e.app);
+
+	}, true);
+
+	function fnCallback(){
+		console.log("Called fnCallback ---------------------");
+		console.log(arguments);		
+	}
+	function testManifest(){
+		var m = manifest.create();
+
+		m.appendEntry("./test1.js");
+		m.appendEntry({url:"../css/test1.css",cache:false, wait:true});
+		m.appendEntry({url:"../css/test2.css", wait: false});
+		
+
+		
+		var p = m.process();
+
+		
+	}
+	function testGet(){
+		var data = {
+			name: "Jose",
+			code: 201,
+			opsendjs: 1,
+		};
+
+		url = "http://localhost/echo.php";
+		var p = ajax.get(url, data);
+		p.then(function(data, env){
+			console.log("Got Data [Type=%s]-----------", env.xhr.responseContentType);
+			console.log(data);
+		});
+
+	}
+	function testPost(){
+		var data = {
+			name: "Jose",
+			code: 201
+		};
+
+		url = "/echo.php";
+		var p = ajax.post(url, data);
+		p.then(function(data, env){
+			console.log("Got Data [Type=%s]-----------", env.xhr.responseContentType);
+			console.log(data);
+
+		});
+
+	}
+	function testController(){
+		var c = core.controller.decorate({});
+		c.on("hello", fnCallback);
+
+		c._state.isready = true;
+		c.publish("hello", "jose", 25);	
+	}
+	function test001(){
+		var a = {name: "joe"};
+		var b = {name:"jose", doThis: function(){ console.log("hello..."); } };
+
+		console.log(a.name);
+		dom.extend(a,b);
+		console.log(a);
+	}
+	function testObserver(){
+		$.onObserver(n, "addedNodes", "div", function(owner, target, node){ console.log("Added regular node div %o", node); });
+		$.onObserver(n, "removedNodes", "div", function(owner, target, node){ console.log("Removed node div %o", node); });
+		$.onObserver(n, "addedNodes", '[name="e5"]', function(owner, target, node){ console.log("Added node E5 div %o", node ); });
+
+		$.onObserver(n,"attributeChanged", "name", function(owner, target, attr){ console.log("Changed attribute name=%s", attr ); });
+		$.debug(n);
+		//dom.remove(dom.get(".e1"));
+		$.append(n, "<div name='e5'>Hello e5</div>");
+		$.append(n, "<div name='e6'>Hello e6</div>");
+
+		$.attr(n,"k","Joe");
+		$.attr(n,"name", "field1");
+	}
+
+</script>
+</body>
+</html>

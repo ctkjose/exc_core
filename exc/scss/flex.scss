@@ -1,0 +1,245 @@
+
+$flex_containers: ".flex";
+$flex_items: ".flex > div", ".flex > section";
+
+.flex  {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-grow: 1;
+	
+	position: relative;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	z-index: 0;	
+	max-width: 100%;
+}
+
+
+
+
+
+
+
+/*modifiers*/
+@each $flex_sel in $flex_containers {
+	
+	#{$flex_sel}.with-columns  {
+		flex-direction: row !important;
+	}
+	#{$flex_sel}.with-rows {
+		flex-direction: column !important;
+	}
+	#{$flex_sel}.with-wrap {
+		flex-wrap: wrap !important;
+	}
+	#{$flex_sel}.is-block {
+		display: block;
+		flex-direction: unset;
+	}
+	
+}
+.flex.with-rows {
+	width: 100%;
+}
+
+@each $flex_sel in $flex_items {
+	
+	#{$flex_sel} {
+		flex-basis: auto;
+		flex-grow: 1;
+		flex-shrink: 1;
+	}
+	
+	.w-fixed {
+		flex-shrink: 0 !important;
+		flex-grow: 0 !important;
+	}
+	
+	@for $i from 1 through 12 {
+		$szp: 100% / 12 *  $i;
+		#{$flex_sel}.w-#{$i} {
+			flex-basis: #{$szp};
+		}
+	}
+}
+
+
+.is-round {
+	border-radius: .25rem;
+}
+
+/* padding and gutters */
+@for $i from 1 through 12 {
+	$v: 0.25em * $i;
+	.p-#{$i} {
+		padding: #{$v};
+	}
+	.p-#{$i}-offset {
+		margin: -#{$v}  -#{$v};
+	}
+	.p-#{$i}-offset-sides {
+		margin-left: -#{$v};
+		margin-right: -#{$v};
+	}
+	.p-#{$i}-offset-top{
+		margin-top: -#{$v};
+	}
+	.p-#{$i}-offset-left{
+		margin-left: -#{$v};
+	}
+	.p-#{$i}-offset-right{
+		margin-right: -#{$v};
+	}
+	.p-#{$i}-offset-bottom{
+		margin-bottom: -#{$v};
+	}
+	.p-left-#{$i} {
+		padding-left: #{$v};
+	}
+	.p-top-#{$i} {
+		padding-top: #{$v};
+	}
+	.p-right-#{$i} {
+		padding-right: #{$v};
+	}
+	.p-bottom-#{$i} {
+		padding-bottom: #{$v};
+	}
+	.g-#{$i} {
+		margin-left: #{$v};
+		margin-right: #{$v};
+	}
+}
+
+
+
+
+.w-fill {
+	flex-grow: 0 !important;
+	flex-basis: fill;
+}
+
+@each $pname, $prop in (start, flex-start), (end, flex-end), (baseline, baseline), (center, center) {
+	.valign-#{$pname} {
+		align-items: #{$prop};
+	}
+	.valign-self-#{$pname} {
+		align-self: #{$prop};
+	}
+}
+@each $pname, $prop in (start, flex-start), (end, flex-end), (around, space-around), (evenly, space-evenly), (between, space-between), (center, center) {
+	.halign-#{$pname} {
+		justify-content: #{$prop};
+	}
+}
+
+
+@each $breakpoint in $layout-breakpoints {
+  $name: nth($breakpoint, 1);
+  $smin: nth($breakpoint, 2);
+  $smax: nth($breakpoint, 3);
+  
+   @media only screen and (min-width: $smin) and (max-width: $smax) {
+	
+		@each $pname, $prop in (start, flex-start), (end, flex-end), (baseline, baseline), (center, center) {
+			.valign-#{$name}-#{$pname} {
+				align-items: #{$prop} !important;
+			}
+			.valign-self-#{$name}-#{$pname} {
+				align-self: #{$prop} !important;
+			}
+		}
+		@each $pname, $prop in (start, flex-start), (end, flex-end), (around, space-around), (evenly, space-evenly), (between, space-between), (center, center) {
+			.halign-#{$name}-#{$pname} {
+				justify-content: #{$prop} !important;
+			}
+		}
+		
+		
+		.with-columns-#{$name}  {
+			flex-direction: row !important;
+		}
+		.with-rows-#{$name} {
+			flex-direction: column !important;
+		}
+		.flex.is-block-#{$name} {
+			display: block !important;
+			flex-direction: unset;
+		}
+		.with-wrap-#{$name} {
+			flex-wrap: wrap !important;
+		}
+			
+		/* padding and gutters */
+		@for $i from 1 through 12 {
+			$v: 0.25em * $i;
+			.p-#{$name}-#{$i} {
+				padding: #{$v};
+			}
+			.p-left-#{$name}-#{$i} {
+				padding-left: #{$v};
+			}
+			.p-top-#{$name}-#{$i} {
+				padding-top: #{$v};
+			}
+			.p-right-#{$name}-#{$i} {
+				padding-right: #{$v};
+			}
+			.p-bottom-#{$name}-#{$i} {
+				padding-bottom: #{$v};
+			}
+			.g-#{$name}-#{$i} {
+				margin-left: #{$v};
+				margin-right: #{$v};
+			}
+		}
+		/* dimensions */
+		.w-#{$name}-fixed {
+			flex-shrink: 0 !important;
+			flex-grow: 0 !important;
+		}
+		
+		@each $flex_sel in $flex_items {
+			@for $i from 1 through 12 {
+				$szp: 100% / 12 *  $i;
+				#{$flex_sel}.w-#{$name}-#{$i} {
+					flex-basis: #{$szp};
+				}
+			}
+		}
+		
+		.w-#{$name}-fill {
+			flex-grow: 1;
+			flex-basis: fill;
+		}
+  
+   }
+}
+
+
+/*visibility */
+.is-hidden:not(.is-hidden-off) {
+	display: none !important;
+}
+		
+@each $breakpoint in $layout-breakpoints {
+  $name: nth($breakpoint, 1);
+  $smin: nth($breakpoint, 2);
+  $smax: nth($breakpoint, 3);
+  
+   @media only screen and (min-width: $smin) and (max-width: $smax) {
+		.is-hidden-#{$name}:not(.is-hidden-off) {
+			display: none !important;
+		}
+		.state-show-block-#{$name} {
+			display: block !important;
+		}
+		.show-show-flex-#{$name} {
+			display: flex !important;
+		}
+		.show-show-inline-#{$name} {
+			display: inline-block !important;
+		}
+   }
+}

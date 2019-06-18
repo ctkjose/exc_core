@@ -1,0 +1,86 @@
+https://css-tricks.com/now-ever-might-not-need-jquery/
+https://polyfill.io/v3/url-builder
+https://gist.github.com/joyrexus/7307312
+https://plainjs.com/javascript/manipulation/wrap-an-html-structure-around-an-element-28/
+
+== SELECT
+
+	document.getElementById("mySelect").selectedIndex = "2"; //0=first -1=deselect
+
+	var selectobject=document.getElementById("mySelect");
+	for (var i=0; i<selectobject.length; i++){
+	if (selectobject.options[i].value == 'A' )
+	   selectobject.remove(i);
+	}
+
+== XHR
+
+	xhr.responseSate, xhr.state, xhr.status, xhr.statusText, xhr.responseText
+
+
+== DOM Core Level 2
+properties
+
+node.nextSibling
+node.parentElement
+node.parentNode
+
+var aChild = document.createElement("p");
+var aChild = element.appendChild(aChild);
+var oldChild = node.removeChild(child);
+
+
+className
+createElement
+createTextNode
+getElementById
+getElementsByTagName
+nodeName
+nodeType
+nodeValue
+tagName
+hasChildNodes
+parentNode
+appendChild
+cloneNode
+insertBefore
+removeChild
+replaceChild
+deleteData
+insertData
+normalize
+replaceData
+substringData
+createAttribute
+getAttribute
+setAttribute
+documentElement
+ownerDocument
+
+elm.cloneNode(a)
+
+elm.prepend(aElm);
+elm.before(aElm);
+elm.remove(aElm);
+
+
+
+IDEAS
+http://nanobar.jacoborus.codes
+
+
+
+bad IE support
+elem.closest("div"); //only IE edge 15-14
+elm.remove()
+elem.replaceWith(someOtherElem);
+
+
+fetch('https://some.url')
+  .then(response => response.json())
+  .then(data => {
+    // do stuff with the data
+  });
+
+
+https://github.com/axios/axios

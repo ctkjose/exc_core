@@ -1,0 +1,107 @@
+
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+	margin-bottom: .5rem;
+	font-family: $heading-font;
+	font-weight: $heading-weight;
+	line-height: $heading-line-height;
+	color: inherit;
+}
+
+h1, .h1 { font-size: 2.5rem; }
+h2, .h2 { font-size: 2rem }
+h3, .h3 { font-size: 1.75rem }
+h4, .h4 { font-size: 1.5rem }
+h5, .h5 { font-size: 1.25rem }
+h6, .h6 { font-size: 1rem }
+
+b, strong {
+	font-weight: bolder;
+}
+
+code {
+	font-size: 87.5%;
+	color: #E83E8C;
+}
+
+pre {
+	display: block;
+	overflow: auto;
+	overflow-y: hidden;
+	color: #333;
+	background: rgb(250, 250, 250);
+}
+
+pre, code {
+	font-family: Consolas, Courier, monospace;
+}
+
+pre code {
+	display: block;
+	line-height: 1.2;
+	white-space: pre;
+	color: inherit;
+	background: none;
+	border: 1px solid #eee;
+	padding: .75em;
+}
+
+.pre-scrollable {
+	max-height: 340px;
+	overflow-y: scroll;
+}
+
+.lead {
+	font-size: 1.25rem;
+	font-weight: 300;
+}
+
+.mark, mark {
+	padding: .2em;
+	background-color: #FCF8E3;
+}
+cite {
+	font-style: italic;	
+}
+
+blockquote.quote {
+	font-style: italic;
+	margin-left: .5rem;
+	margin-bottom: 1rem;
+	
+	border-left: 4px solid #CCC;
+	padding-left: 8px;
+}
+blockquote.note {
+	
+	margin-left: .5rem;
+	margin-bottom: 1rem;
+	
+	padding: 10px 10px;
+	background-color: #DDFFDD;
+	border-left: solid 4px #4CAF50;
+}
+
+blockquote.warn {
+	
+	margin-left: .5rem;
+	margin-bottom: 1rem;
+	
+	padding: 10px 10px;
+	background-color: #F8D7DA;;
+	border-left: solid 4px #AF4B44;
+}
+blockquote  p {
+	margin-bottom: 1rem;
+}
+blockquote p:last-child {
+	margin-bottom: 0;
+}
+
+blockquote footer {
+	display: block;
+	font-size: 80%;
+	color: #6C757D;
+}
+

@@ -1,0 +1,77 @@
+.exc-date {
+	flex-direction: row;
+}
+
+.exc-date-month,
+.exc-date-year,
+.exc-date-day {
+	padding-left: .05rem;
+	padding-right: .05rem;
+	outline: none;
+}
+
+.exc-datepicker-container {
+	width: 8em;
+	flex-grow: 0;
+}
+.exc-datepicker-container .textbox {
+	width: 6em;
+}
+.exc-time-container {
+	flex-direction: row;
+	width: 10rem;
+	flex-grow: 0;
+}
+
+.exc-time-divider,
+.exc-date-divider {
+	padding-left: .15rem;
+	padding-right: .15rem;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.exc-datetime ~ .exc-time {
+	margin-left: 10px;
+}
+.exc-time {
+	flex-direction: row;
+}
+.exc-time-hour,
+.exc-time-minutes,
+.exc-time-seconds {
+	padding-left: .05rem;
+	padding-right: .05rem;
+	outline: none;
+}
+
+
+.exc-time-pm {
+	padding-left: .5rem;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
+}
+
+.exc-time-pulsate {
+  background-color: #ffffff;
+  animation-name: exc-time-pulsate-animation;
+  animation-duration: 2s;
+  animation-iteration-count: 3;
+}
+
+@keyframes exc-time-pulsate-animation {
+  0% {
+    background-color: #ffffff;
+  }
+  50% {
+    background-color: #FF693B;
+  }
+  100% {
+    background-color: #ffffff;
+  }
+}

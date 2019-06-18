@@ -1,0 +1,40 @@
+<head>
+	<meta charset="utf-8">
+	<title>Test for exc.dom.js Core</title>
+	<script type='text/javascript' src='../exc/js/exc.dom.js'></script>
+	<script type='text/javascript' src='../exc/js/exc.core.js'></script>
+	<script type='text/javascript' src='../exc/js/exc.app.js'></script>
+	<script type='text/javascript' src='../exc/js/exc.crypto.js'></script>	
+	<script type='text/javascript' src='../exc/js/exc.helpers.js'></script>
+	<script type='text/javascript' src='http://cdn.rawgit.com/h2non/jsHashes/master/hashes.js'></script>
+	
+	<script type='text/javascript'>
+	</script>
+</head>
+<body>
+<h2>Test HS256 & JWT</h2>
+
+<script>
+
+core.ready(function(){
+
+b64 = new Hashes.Base64
+var tk = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1IiwibmFtZSI6IkpvZSBEb2UiLCJrIjoiVEVTVCJ9.O9bvjKJDrT8S-nZZyvd6KrmC5lyC0kabwAiNh6qzHq8";
+
+
+
+var jwt = exc.crypto.jwt.parse(tk);
+console.log(jwt);
+
+var o = exc.crypto.jwt.create(jwt.header,jwt.payload, "your-256-bit-secret");
+
+console.log(o);
+
+
+
+});
+
+
+</script>
+</body>
+</html>

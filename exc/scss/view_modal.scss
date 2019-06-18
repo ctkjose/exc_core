@@ -1,0 +1,164 @@
+.view {
+	display: none;
+	transition: all 450ms ease-out;
+	background-color: inherit;
+
+	&.is-open {
+		display: unset;
+		opacity: 1;
+	}
+
+	&.view-is-showing {
+		display: block;
+		z-index: 41;
+		position: absolute;
+		top: 0;
+	}
+	&.view-is-hiding {
+		display: block;
+		opacity: 1;
+		z-index: 40;
+		position: absolute;
+		top: 0;
+	}
+	&.view-is-hidden {
+		display: none;
+	}
+
+	&.view-slide-to-right {
+		border-left: 1px solid #ccc;
+	}
+	&.view-slide-to-right {
+		border-right: 1px solid #ccc;
+	}
+}
+.exc-modal.is-open .view {
+	display: unset;
+	opacity: 1;
+}
+
+
+.role-app-contents > .view {
+
+}
+
+
+.exc-modal {
+	transition: transform .3s ease-out;
+	
+	&:before {
+		content: ""; 
+		display: none;
+		background: rgba(0,0,0,.6);
+		position: fixed;
+		top: 0; left: 0; right: 0; bottom: 0; 
+		z-index: 10;
+	}
+	&.is-open {
+		position: fixed;
+		top: 0; left: 0; right: 0; bottom: 0;
+		z-index: 10;
+		
+		height: 100%;
+		
+		display: flex;
+		justify-content: center;
+		align-content: center;
+		flex-direction: column;
+		
+		&:before{
+			display: block;
+		}
+	}
+}
+
+.exc-modal-dialog {
+	background: #fefefe;
+	border: 1px solid #eeeeee;
+	border-radius: 5px;
+	
+	min-width: 360px;
+	-webkit-transform: translate(0, -500%);
+	transform: translate(0, -500%);
+	-webkit-transition: -webkit-transform 0.3s ease-out;
+	transition: all 0.3s ease-out;
+
+}
+.exc-modal-dialog {
+	z-index: 11;
+
+	top: -100%;
+	position: fixed;
+}
+
+.exc-modal.is-open > .exc-modal-dialog {
+	-webkit-transform: translate(0, 0);
+	transform: translate(0, 0);
+	margin: auto;
+	flex-grow: 0;
+	position: static;
+	
+}
+
+.exc-modal-body{
+	padding: 20px;
+}
+
+.exc-modal-header,
+.exc-modal-footer{
+	padding: 10px 20px;
+}
+
+.exc-modal-header{
+	border-bottom: 1px solid #eeeeee;
+  
+	h2{
+		font-size: 20px;
+	}
+
+	&.with-text-header {
+		font-weight: 400;
+	}
+}
+
+.exc-modal-footer{
+	border-top: 1px solid #eeeeee;
+	text-align: right;
+}
+.exc-modal-dialog {
+	.exc-modal-body.no-padding, .exc-modal-header.no-padding, .exc-modal-footer.no-padding {
+		padding: 0;
+	}
+}
+.exc-modal-dialog.no-padding {
+	border-width: 0;
+	& > .exc-modal-body {
+		padding: 0;
+	}
+	& > .exc-modal-header {
+		padding: 0;
+	}
+	& > .exc-modal-footer {
+		padding: 0;
+	}
+}
+
+
+
+
+.exc-modal-btn-close {
+	display: none;
+	width: 24px;
+	height: 24px;
+	position: absolute;
+	right: -12px;
+	top: -12px;
+	z-index: 12;
+}
+.exc-modal-btn-close:hover .exc-icon-fillcolor {
+	fill: #D75A4A !important;
+}
+.exc-modal.is-open .exc-modal-btn-close {
+	display: block;
+}
+

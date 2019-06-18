@@ -1,0 +1,49 @@
+.pill {
+	display: inline-block;
+	padding: .25em .6em;
+	border-radius: .25em;
+	
+	font-size: .75em;
+	font-weight: 700;
+	line-height: 1;
+	
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+
+	color: $theme-button-default-color-text;
+	background-color: $theme-panel-color-lightgrey-fill;
+	
+	$color-hover: darken($theme-panel-color-lightgrey-fill, 10);
+	$color-active: darken($color-hover, 10);
+	
+	@at-root a.pill:not(.is-disabled):not(.is-busy){
+		&:hover {
+			background-color: $color-hover;
+		}
+		&:active {
+			background-color: $color-active;
+		}
+	}
+	
+	@each $color-name, $color-text, $color-bg in $theme-buttons {
+		$color-hover: darken($color-bg, 5);
+		$color-active: darken($color-hover, 5);
+			
+		&.#{$color-name} {
+			color: $color-text;
+			background-color: $color-bg;
+		}
+		
+		 @at-root a.pill.#{$color-name} {
+			&:not(.is-disabled):not(.is-busy){
+				&:hover {
+					background-color: $color-hover;
+				}
+				&:active {
+					background-color: $color-active;
+				}
+			}
+		 }
+	}
+}

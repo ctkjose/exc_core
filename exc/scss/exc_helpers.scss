@@ -1,0 +1,19 @@
+.with-error-pulsate {
+  background-color: #ffffff;
+  border-radius: 3px;
+  animation-name: with-error-pulsate-animation;
+  animation-duration: 2s;
+  animation-iteration-count: 3;
+}
+
+@keyframes with-error-pulsate-animation {
+  0% {
+    background-color: #ffffff;
+  }
+  50% {
+    background-color: #FF693B;
+  }
+  100% {
+    background-color: #ffffff;
+  }
+}
