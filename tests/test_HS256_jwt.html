@@ -6,8 +6,6 @@
 	<script type='text/javascript' src='../exc/js/exc.app.js'></script>
 	<script type='text/javascript' src='../exc/js/exc.crypto.js'></script>	
 	<script type='text/javascript' src='../exc/js/exc.helpers.js'></script>
-	<script type='text/javascript' src='http://cdn.rawgit.com/h2non/jsHashes/master/hashes.js'></script>
-	
 	<script type='text/javascript'>
 	</script>
 </head>
@@ -16,24 +14,33 @@
 
 <script>
 
+
 core.ready(function(){
 
-b64 = new Hashes.Base64
-var tk = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1IiwibmFtZSI6IkpvZSBEb2UiLCJrIjoiVEVTVCJ9.O9bvjKJDrT8S-nZZyvd6KrmC5lyC0kabwAiNh6qzHq8";
-
-
-
-var jwt = exc.crypto.jwt.parse(tk);
-console.log(jwt);
-
-var o = exc.crypto.jwt.create(jwt.header,jwt.payload, "your-256-bit-secret");
-
-console.log(o);
-
-
+(function(){
+	var k ="SECRET123";
+	var bm = function(payload){
+		var o = exc.crypto.b64URL.encode(JSON.stringify(payload)); 
+		var s = exc.crypto.SHA256HMAC(k, o);
+		s = exc.crypto.b64URL.encode(s);
+		return o + "." + s;
+	};
+	exc.backend.buildMessage = function(payload){
+		return bm(payload);
+	};
+})();
 
 });
 
+function testJWT(){
+	var tk = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1IiwibmFtZSI6IkpvZSBEb2UiLCJrIjoiVEVTVCJ9.O9bvjKJDrT8S-nZZyvd6KrmC5lyC0kabwAiNh6qzHq8";
+	var jwt = exc.crypto.jwt.parse(tk);
+	console.log(jwt);
+	
+	var o = exc.crypto.jwt.create(jwt.header,jwt.payload, "your-256-bit-secret");
+	
+	console.log(o);
+}
 
 </script>
 </body>

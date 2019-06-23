@@ -289,7 +289,7 @@ exc.crypto = {
 (function(crypto){
 	crypto.jwt = {
 		create: function(header, payload, key){
-			var o = crypto.b64URL.encode(JSON.stringify(header)) + "." + crypto.b64URL.encode(JSON.stringify(payload));
+			var o = crypto.b64URL.encode(JSON.stringify(header)) + "." + crypto.b64URL.encode(JSON.stringify(payload)); 
 			var sig = exc.crypto.SHA256HMAC(key, o);
 			sig = exc.crypto.b64URL.encode(sig);
 			var out = {'sig': sig, 'jwt': o + '.' + sig };

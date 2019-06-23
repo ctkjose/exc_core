@@ -455,6 +455,7 @@
 
 
 	exc.backend = {
+		ready: false,
 		action: function(){
 			var args = arguments;
 			var url = undefined;
@@ -508,7 +509,7 @@
 				core.extend( pdata, data );
 			}
 
-			payload.api_return = 'json';
+			payload.api_return = 'js';
 			payload.api_json_state = JSON.stringify(this.getState());
 			payload.api_json_data = JSON.stringify(pdata);
 
@@ -520,35 +521,7 @@
 
 			request.on("done", function(response){
 				console.log("backend response %o", response);
-				if(response.lastError){
-					p.reject();
-					return;
-				}
-				if(response.headers['CONTENT-TYPE-MIME'] == "text/javascript"){
-					var bd = {};					
-					var js = "" 
-					js += response.data;
-					js += "";
-					console.log(js);
-					var ok = true;
-					try{
-						eval(js);
-					}catch(error){
-						ok = false;
-						if (error instanceof SyntaxError) {
-							console.log("[EXC][BACKEND][INTERACTION] SYNTAX ERROR IN CODE.");
-							console.log(e.message);
-						}
-						p.reject();
-					}
-
-					if(ok){
-						p.resolve(bd);
-					}
-				}else if(response.data && typeof(response.data) == "object"){
-					exc.app.loadInteraction(response.data);
-			
-				}
+				exc.backend.handleResponse(p, response);
 			});
 			return p;
 		},
