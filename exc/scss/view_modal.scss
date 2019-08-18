@@ -1,11 +1,13 @@
 .view {
-	display: none;
 	transition: all 450ms ease-out;
 	background-color: inherit;
 
 	&.is-open {
-		display: unset;
 		opacity: 1;
+		display: block;
+	}
+	&.is-closed {
+		display: none;
 	}
 
 	&.view-is-showing {

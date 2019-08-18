@@ -12,7 +12,7 @@
 			core.callbackWithArguments(fn, null, []);
 		});
 	};
-	core.createUID= function(){
+	core.createUID = function(){
 		var d = new Date().getTime();
 		var uuid = 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
 			var r = (d + Math.random()*16)%16 | 0;
@@ -20,6 +20,9 @@
 			return (c=='x' ? r : (r&0x3|0x8)).toString(16).toUpperCase();
 		});
 		return uuid;
+	};
+	core.createID = function(){
+		return Math.random().toString(36).substr(2, 9);
 	};
 	core.extend= function(a) {
 		var k = arguments, l = null;
@@ -48,6 +51,21 @@
 		var fn = (typeof(n) == "function") ? n : obj[n];
 		if(typeof(fn) != "function") return undefined;
 		return fn.apply(obj, args);
+	};
+	core.isCallable = function(fn, obj){
+		
+		if(!fn) return false;
+		if(typeof(fn) == "function") return true;
+
+		if(Array.isArray(fn)){
+			if(fn[0] && (typeof(fn[0]) == "object") && (typeof(fn[1]) == 'string') && (typeof(fn[0][fn[1]]) == "function") ) return true;
+			return false;
+		}
+
+		var args = Array.prototype.slice.call(arguments, 1);
+		if( obj  && (typeof(obj) == "object") && (typeof(fn) == 'string') && (typeof(obj[fn]) == "function")) return true;
+		
+		return false;
 	};
 	core.callback = function(fn){
 		var args = Array.prototype.slice.call(arguments, 1);

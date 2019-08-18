@@ -140,7 +140,7 @@
 	</div>
 
 <div class="view" name="findDialog" data-view='{"type":"view", "params":{"title":"Find Record", "options":{"closeButton":true}}}'>
-	<section class="form">
+	<div data-cmp="form">
 		<div data-cmp='{"type":"formRow"}' class="keep-together" name="testOpRow1">
 			<div data-cmp='{"type": "check", "name":"testOp1_Selection"}'></div>
 			<div data-cmp='{"type": "formField", "name":"testOp1Field", "caption":"By Name"}'>
@@ -156,10 +156,10 @@
 		<div data-cmp='{"type":"formRow"}'>
 			<div data-cmp='{"type": "btn", "name":"doFindRecord", "caption":"Find...", "color":"blue" }'></div>
 		</div>
-	</section>
+	</div>
 </div>
 <div class="view" name="loginView">
-<section class="form">
+<section data-cmp="form">
 	<h1 class="form-title">Welcome, please login</h1>
 	<div data-cmp='{"type":"formRow"}'>
 		<div data-cmp='{"type": "formField", "name":"loginUserField", "caption":"Username"}'>
@@ -177,7 +177,7 @@
 </section>
 </div>
 <div class="view" name="recordView">
-<section class="form">
+<section data-cmp="form">
 	<h1 class="form-title">Employee Record</h1>
 	<div class="form-row">
 		<div class="field sz-1">

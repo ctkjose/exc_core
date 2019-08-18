@@ -130,8 +130,6 @@ function testDS(){
 
 	ds1.on("onChange", callback1);
 
-
-
 }
 function testSelectBinded(){
 

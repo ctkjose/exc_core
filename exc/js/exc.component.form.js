@@ -74,3 +74,63 @@ exc.components.register({ ///NST:MARK:CLASS:formField
 
 	}
 });
+exc.components.register({ ///NST:MARK:CLASS:form
+	id: 'form',
+	isContainer: true,
+	selectors: [".form"],
+	vs: "none", //value source
+	inherits: [],
+	fn : { //additional functionality added to the element
+
+
+	},
+	init: function(){
+		
+	},
+	decorate: function(e, node){
+		o.addClass("form");
+		
+	},
+	build: function(e){
+
+		var o;
+		var flgIsForm = false;
+		if(e.hasOwnProperty("node") && e.node){
+			o = e.node;
+			flgIsForm = ($.tag(o) == "form") ? true : false;
+		}
+
+		if(!flgIsForm){
+			console.log("cmp.building from tag");
+			o = $.htmlToNode("<form class=\"form\"></form>");
+		}else{
+			console.log("cmp.using existing from tag");
+		}
+
+		if(!o) return undefined;
+
+		if( e.hasProperty("attributes") ){
+			for(var ak in e.properties.attributes) o.attr(ak, e.properties.attributes[ak]);
+		}
+
+		
+		if( !e.hasAttr("method") && e.hasOwnProperty("name") ) o.setAttribute("name", e.name);
+
+		if(!e.hasAttr("method")){
+			if(e.hasProperty("method")){
+				o.setAttribute("method",e.properties.method);
+			}else{
+				o.setAttribute("method","post");
+			}
+		}
+
+		if( e.hasProperty("classes") ){
+			e.properties.classes.forEach( function(className){ o.addClass(className); });
+		}
+
+		return (flgIsForm) ? undefined : o;
+	},
+	renderCompleted: function(o){
+
+	}
+});

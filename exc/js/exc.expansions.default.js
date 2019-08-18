@@ -13,26 +13,112 @@ exc.expansions.define( { ///NST:MARK:CLASS:exc-build
 });
 */
 
-exc.expansions.define( { ///NST:MARK:CLASS:exc-publishOnChange
-	name: "exc-publishOnChange",
-	apply: function(o){ //returns true if this event can be used with this component
-		return true;
-	},
-	install: function(any){ //static callback
-		var o = $.get(any);
-		
-		if($.hasAction(o, {event:"change",name:"publishOnChange",handler:"handler"})) return;
-		var fn = function(e){ //static callback
+exc.expansions.addAction(  
+	{'type': 'msg', ///NST:MARK:CLASS:action_jose
+		'r': /\[([A-Za-z0-9_]+)\]/,
+		'args': [
+			{'name': 'msg', 'idx': 1, 'default': '', 'type':'string', 'transform': null },
+		]
+	}
+);
+exc.expansions.addAction( 
+	{'type': 'cfn', ///NST:MARK:CLASS:action-controllerfunction
+		'r': /\[([A-Za-z0-9_]+)\.([A-Za-z0-9_]+)\]/,
+		'args': [
+			{'name': 'controller', 'idx': 1, 'default': '', 'transform': null },
+			{'name': 'fn', 'idx': 2, 'default': '', 'type':'string', 'transform': null }
+		]
+	}
+);
+exc.expansions.addAction( 
+	{'type':'hndl', ///NST:MARK:CLASS:action-enable-disable
+		'r':/(disable|enable)\(\$([A-Za-z0-9_.]+)\)/,
+		'args': [
+			{'name': 'action', 'idx': 1, 'default': '', 'type':'string', 'transform': null },
+			{'name': 'sel', 'idx': 2, 'default': '', 'type':'string', 'transform': null },
+		],
+		'handler': function(evt, args){
+			var o;
+			if(args.sel == 'self'){
+				o = $.fromEvent(e, "[data-uiw]");
+			}else{
+				o = $.component(args.sel);
+			}
+			if(!o) return;
+			try{
+				if(args.action == "enable"){
+					o.enable();
+				}else if(args.action == "disable"){
+					o.disable();
+				}
+			}catch(err){}
+		}
+	}
+);
+/*
+exc.expansions.addAction( 
+	{'type':'hndl', ///NST:MARK:CLASS:action-validate-value
+		'r':/(value)\((\/.+\/|[<>!]?\=?\s?\-?[0-9.]+|\'[^\']*\'|\"[^\"]*\")\s?,\s?(\'[^\']*\'|\"[^\"]*\"|__\((\'[^\']*\'|\"[^\"]*\")\)|\[[a-zA-Z\_\.]+\])\)/
+		'args': [
+			{'name': 'action', 'idx': 1, 'default': 'value', 'type':'string', 'transform': null },
+			{'name': 'value', 'idx': 2, 'default': '', 'type':'string', 'transform': null },
+			{'name': 'msg', 'idx': 3, 'default': '', 'type':'string', 'transform': null },
+		],
+		'handler': function(evt, args){
+			var o = $.fromEvent(e, "[data-uiw]");
+			if(!o) return;
+			try{
+				var v = o.getValue();
+				if(args.action == "enable"){
+					o.enable();
+				}else if(args.action == "disable"){
+					o.disable();
+				}
+			}catch(err){}
+		}
+	}
+);
+*/
+
+(function(){
+	var _events = ['click', 'change', 'blur', 'focus', 'dblclick', 'keydown','keyup','keypress', 'mouseenter','mousemove','mouseover','mouseup', 'copy','cut','paste'];
+
+	
+
+	var fndecorate = function(def, evt){
+		var eattr = "m-" + evt;
+		var fnMagicAction =  function(e){ //static callback
 			var o = $.fromEvent(e, "[data-uiw]");
 			if(o.hasClass('is-disabled')) return;
-
-			var msg = o.attr("data-exc-publishOnChange");
-			app.publish(msg, {'cmd':msg, 'event': e});
+			var attr = o.getAttribute(eattr);
+			
+			if( exc.expansions.performAction(attr, e, [])){
+				
+			}
 		};
-		$.onAction(o, "change.publishOnChange", fn);
+		def.install = function(any){ //static callback
+			var o = $.get(any);
+			if($.hasAction(o, {event:evt,name:"m"+evt,handler:"handler"})) return;
+			$.onAction(o, evt + ".m" + evt, fnMagicAction);
+		};
+		
 	}
-});
-exc.expansions.define( { ///NST:MARK:CLASS:exc-publishOnClick
+	var fn =[];
+	for(var idx=0; idx< _events.length; idx++){
+		var evt = _events[idx];
+
+		var def = {
+			'name': "m-" + evt,
+			apply: function(o){
+				return true;
+			}
+		};
+
+		fndecorate(def, evt);
+		exc.expansions.define( def );
+	}
+})();
+exc.expansions.define( { ///NST:MARK:CLASS:exc-publishOnClick1
 	name: "exc-publishOnClick",
 	apply: function(o){ //returns true if this event can be used with this component
 		return true;
@@ -51,65 +137,27 @@ exc.expansions.define( { ///NST:MARK:CLASS:exc-publishOnClick
 		$.onAction(o, "click.publishOnClick", fn);
 	}
 });
-exc.expansions.define( { ///NST:MARK:CLASS:exc-publishOnBlur
-	name: "exc-publishOnBlur",
+exc.expansions.define( { ///NST:MARK:CLASS:exc-publishOnClick1
+	name: "exc-publishOnClick",
 	apply: function(o){ //returns true if this event can be used with this component
 		return true;
 	},
 	install: function(any){ //static callback
 		var o = $.get(any);
 		
-		if($.hasAction(o, {event:"blur",name:"publishOnBlur",handler:"handler"})) return;
+		if($.hasAction(o, {event:"click",name:"publishOnClick",handler:"handler"})) return;
 		var fn = function(e){ //static callback
 			var o = $.fromEvent(e, "[data-uiw]");
 			if(o.hasClass('is-disabled')) return;
 
-			var msg = o.getAttribute("data-exc-publishOnBlur");
+			var msg = o.getAttribute("data-exc-publishOnClick");
 			app.publish(msg, {'cmd':msg, 'event': e});
 		};
-		$.onAction(o, "blur.publishOnBlur", fn);
+		$.onAction(o, "click.publishOnClick", fn);
 	}
 });
-exc.expansions.define( { ///NST:MARK:CLASS:exc-publishOnFocus
-	name: "exc-publishOnFocus",
-	apply: function(o){ //returns true if this event can be used with this component
-		return true;
-	},
-	install: function(any){ //static callback
-		var o = $.get(any);
-		
-		if($.hasAction(o, {event:"focus",name:"publishOnFocus",handler:"handler"})) return;
-		var fn = function(e){ //static callback
-			var o = $.fromEvent(e, "[data-uiw]");
-			if(o.hasClass('is-disabled')) return;
-
-			var msg = o.getAttribute("data-exc-publishOnFocus");
-			app.publish(msg, {'cmd':msg, 'event': e});
-		};
-		$.onAction(o, "blur.publishOnFocus", fn);
-	}
-});
-exc.expansions.define( { ///NST:MARK:CLASS:exc-publishOnPaste
-	name: "exc-publishOnPaste",
-	apply: function(o){ //returns true if this event can be used with this component
-		return true;
-	},
-	install: function(any){ //static callback
-		var o = $.get(any);
-		
-		if($.hasAction(o, {event:"paste",name:"publishOnPaste",handler:"handler"})) return;
-		var fn = function(e){ //static callback
-			var o = $.fromEvent(e, "[data-uiw]");
-			if(o.hasClass('is-disabled')) return;
-
-			var msg = o.getAttribute("data-exc-publishOnPaste");
-			app.publish(msg, {'cmd':msg, 'event': e});
-		};
-		$.onAction(o, "paste.publishOnPaste", fn);
-	}
-});
-exc.expansions.define( { ///NST:MARK:CLASS:exc-clickConfirm
-	name: "exc-clickconfirm",
+exc.expansions.define( { ///NST:MARK:CLASS:m-confirm
+	name: "m-confirm",
 	install: function(any){
 		var o = $.get(any);
 		
@@ -141,47 +189,6 @@ exc.expansions.define( { ///NST:MARK:CLASS:exc-autoDisable
 			$.component(o).disable();
 		};
 		$.onAction(o, "click.autodisable()", fn);
-	}
-});
-exc.expansions.define( { ///NST:MARK:CLASS:exc-clickDisable
-	name: "exc-clickDisable",
-	install: function(any){
-		var o = $.get(any);
-		if($.hasAction(o, {event:"click",name:"clickdisable",handler:"done"})) return;
-		
-		var fn = function(e){
-			var o = $.fromEvent(e, "[data-uiw]");
-			//if(o.hasClass('is-disabled')) return;
-
-			var sel = o.getAttribute("data-exc-clickDisable");
-			var t = $.component(sel);
-			if(t){
-				try{
-					t.disable();
-				}catch(e){}
-			}
-		};
-		$.onAction(o, "click.clickdisable.done()", fn);
-	}
-});
-exc.expansions.define( { ///NST:MARK:CLASS:exc-clickEnable
-	name: "exc-clickEnable",
-	install: function(any){ //static callback
-		var o = $.get(any);
-		
-		if($.hasAction(o, {event:"click",name:"clickenable",handler:"done"})) return;
-		var fn = function(e){ //static callback
-			var o = $.fromEvent(e, "[data-uiw]");
-			//if(o.hasClass('is-disabled')) return;
-			var sel = o.getAttribute("data-exc-clickEnable");
-			var t = $.component(sel);
-			if(t){
-				try{
-					t.enable();
-				}catch(e){}
-			}
-		};
-		$.onAction(o, "click.clickenable.done()", fn);
 	}
 });
 

@@ -132,11 +132,7 @@
 		loadInteraction: function(o){
 			o._type = exc.app.kTypes.INTERACTION;
 
-			if(o.hasOwnProperty("data")){
-				core.extend(this.data, o.data);
-				o.data = {};
-			}
-
+			
 			var pLoadDone = core.promise.create();
 
 			var pLoad = core.promise.create(function(){
@@ -213,7 +209,7 @@
 
 
 			if(controller.hasOwnProperty("interactions") && Array.isArray(controller.interactions) && (controller.interactions.length > 0) ){
-				this.processInteractions(controller.interactions);
+				this.processInteractionCommands(controller.interactions);
 				delete controller.interactions;
 			}
 		},
@@ -248,11 +244,11 @@
 			$.hide($.get(".appls"));
 			
 			if(controller.hasOwnProperty("interactions") && Array.isArray(controller.interactions) && (controller.interactions.length > 0) ){
-				this.processInteractions(controller.interactions);
+				this.processInteractionCommands(controller.interactions);
 				delete controller.interactions;
 			}
 		},
-		processInteractions: function(list){
+		processInteractionCommands: function(list){
 			if(!list) return;
 			if(!Array.isArray(list) || (list.length==0)) return;
 
@@ -269,25 +265,33 @@
 			}
 		},
 		processInteraction: function(st){
-			if( st.payloads){
-				if(st.payloads.hasOwnProperty("style") ){
-					var css = document.createElement("style");
-					css.innerHTML = st.payloads.style;
-					document.head.appendChild(css);
-				}
-				if(st.payloads.hasOwnProperty("js") ){
-					core.runGlobalCode(st.payloads.js, self);
-				}
-				if(st.payloads.hasOwnProperty("views") ){
-					for(var i in st.payloads.views){
-						exc.views.installEntry(st.payloads.views[i]);
-					}
+			if(!st.payload) return;
+			var p = st.payload;
+
+			if(p.hasOwnProperty("style") ){
+				var css = document.createElement("style");
+				css.innerHTML = p.style;
+				document.head.appendChild(css);
+			}
+			if(p.hasOwnProperty("js") ){
+				core.runGlobalCode(p.js, self);
+			}
+			if(p.hasOwnProperty("views") ){
+				for(var i in p.views){
+					exc.views.installEntry(p.views[i]);
 				}
 			}
-		
-			if(st.interactions && Array.isArray(st.interactions)){
-				exc.app.processInteractions(st.interactions);
+
+			if(p.hasOwnProperty("data")  && p.data){
+				core.extend(this.data, p.data);
+				p.data = {};
 			}
+
+			if(p.hasOwnProperty("cmd") && Array.isArray(p.cmd)){
+				exc.app.processInteractionCommands(p.cmd);
+			}
+
+			
 
 		},
 		interactions: {
@@ -456,38 +460,37 @@
 
 	exc.backend = {
 		ready: false,
+		que: [],
 		action: function(){
 			var args = arguments;
 			var url = undefined;
+			var sa = undefined;
 			var a = {
 				params: {},
 				getURL: function(){
 					return url;
 				},
 				exec: function(data){
-					return exc.backend.commitAction( this, data);
+					if(sa){
+						this.sa = sa;
+						return exc.backend.commitAction( this, data);
+					}
 				}
 			};
 			if(args.length == 0) return null;
+			url = new URL('./', location);
 
 			if(typeof(args[0]) == "string"){
 				var m = /\@\(([A-Za-z0-9_]+)\.([A-Za-z0-9_]+)\)/.exec(args[0]);
 				if( m ){
-					url = new URL('./' + m[1] + "." + m[2], location);
+					sa = m[1] + "." + m[2];
+					url = new URL('./' , location);
 				}else{
 					m = /\@\(([A-Za-z0-9_\.\-\/]+)\/([A-Za-z0-9_]+)\.([A-Za-z0-9_]+)\)/.exec(args[0]);
 					if( m ){ //is a backend action
-						if(m[1].substr(0,1) == "/"){
-							url = new URL(app.backend.base + "c" + m[1] + "/" + m[2] + "." + m[3], location);
-						}else{
-							url = new URL(app.backend.controller_directory + m[1] + "/" + m[2] + "." + m[3], location);
-						}
-					}else{
-
-						m = /\url\(([A-Za-z0-9_\.\-\/\:\?\&\+\%\=\@]+)\)/.exec(args[0]);
-						if( m ){
-							url = new URL(m[1], location);
-						}
+						url = new URL(m[1], location);
+						sa = m[2] + "." + m[3];
+						
 					}
 				}
 			}
@@ -497,7 +500,9 @@
 		commitAction: function(a, data){
 			if(!a) return undefined;
 			
-			var p = core.promise.create();
+			var r = {'id': core.createID(), 'sa': a.sa, 'promise': core.promise.create()};
+			this.que.push(r);
+			var p = r.promise;
 			var url = a.getURL().toString();
 
 			var pdata = {}, payload = {};
@@ -509,9 +514,10 @@
 				core.extend( pdata, data );
 			}
 
-			payload.api_return = 'js';
-			payload.api_json_state = JSON.stringify(this.getState());
-			payload.api_json_data = JSON.stringify(pdata);
+			payload.exc_request = a.sa;
+			payload.exc_request_id = r.id;
+			//spayload.api_json_state = JSON.stringify(this.getState());
+			payload.exc_request_data = JSON.stringify(pdata);
 
 			var request = http.post({
 				url: url,
@@ -521,9 +527,31 @@
 
 			request.on("done", function(response){
 				console.log("backend response %o", response);
-				exc.backend.handleResponse(p, response);
+				exc.backend.handleResponse(r, response);
 			});
 			return p;
+		},
+		requestCompleted(r, data){
+			console.log("exc.backend.requestCompleted(%s)", r.id);
+			if(!r) return;
+
+			r.promise.resolve(data);
+			this.requestRemove(r.id);
+		},
+		requestFailed(r){
+			console.log("exc.backend.requestFailed(%s)", r.id);
+			if(!r) return;
+			
+			r.promise.reject();
+			this.requestRemove(r.id);
+		},
+		requestRemove(id){
+			console.log("exc.backend.requestRemove(%s)", id);
+			Array.prototype.map.call(this.que, function(e, idx){
+				if(e.id==id){
+					exc.backend.que.splice(idx,1);
+				}
+			});
 		},
 		getMS: function(){
 			return '';

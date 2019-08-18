@@ -270,15 +270,22 @@ var http = {
 	},
 	handleResponseJSON: function(request, data){
 		request.response.type = "json";
+		var ok = true;
+
 		try {
 			request.response.data = JSON.parse(data);
-			request.publish("done", request.response);
 		} catch(e){
-			
+			ok = false;
+			console.log(e);
 			console.log("[EXC][AJAX][INVALID JSON IN AJAX RESPONSE]");
 			console.log(e.message);
 
 			request.response.lastError = 520;
+		}
+
+		if(ok){
+			request.publish("done", request.response);
+		}else{
 			request.publish("error", request.response);
 		}
 	},

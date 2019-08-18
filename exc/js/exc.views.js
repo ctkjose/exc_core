@@ -523,6 +523,7 @@ exc.views = {
 
 			this.state = exc.views.states.OPEN;
 			this.o.addClass('is-open');
+			this.o.removeClass('is-closed');
 
 			return this;
 		},
@@ -531,6 +532,7 @@ exc.views = {
 			exc.components.sendMessage(this.o, "viewWillClose", this);
 
 			this.state = exc.views.states.CLOSED;
+			this.o.addClass('is-closed');
 			this.o.removeClass('is-open');
 			return this;
 		}

@@ -4663,13 +4663,15 @@ input[type="checkbox"].field {
   }
 }
 .view {
-  display: none;
   transition: all 450ms ease-out;
   background-color: inherit;
 }
 .view.is-open {
-  display: unset;
   opacity: 1;
+  display: block;
+}
+.view.is-closed {
+  display: none;
 }
 .view.view-is-showing {
   display: block;

@@ -49,8 +49,36 @@ exc.components = {
 		core.extend(def, component);
 		
 		this.items[def.id] = def;
+
+		var behavior;
+		if( def.hasOwnProperty('fn') ){
+			behavior = core.extend({}, this.defaultBehavior, def.fn);
+			this.updateBehaviors(def.id, def.fn);
+		}else{
+			behavior = core.extend({}, this.defaultBehavior);
+		}
+		
+		if( def.hasOwnProperty('inherits') ){
+			for(i=0; i<def.inherits.length;i++){
+				var k = def.inherits[i];
+				if(!this.items.hasOwnProperty(k) || !this.items[k].hasOwnProperty('fn')) continue;
+				core.extend(behavior, this.items[k].fn);
+			}
+		}
+
+		def.behavior = behavior;
 		//console.log("[EXC][COMPONENTS] Definition %s created.", def.id);
 		return def;
+	},
+	updateBehaviors: function(uiw, fn){
+		//update definitions that use this behavior
+		var keys = Object.keys(this.items);
+		for(var i in keys){
+			var key = keys[i];
+			if(!this.items[key].hasOwnProperty('inherits')) continue;
+			if(this.items[key].inherits.indexOf(uiw) === -1) continue;
+			core.extend(this.items[key].behavior, fn);
+		}
 	},
 	get: function(any, type){
 		var o = $.get(any);
@@ -61,9 +89,10 @@ exc.components = {
 		}
 		
 		var uiw = (type) ? type : o.getAttribute("data-uiw"); 
-		if(!uiw) return null;
 		
-		if( !this.items.hasOwnProperty(uiw) ){
+		if(!uiw){
+			uiw = 'generic';
+		}else if( !this.items.hasOwnProperty(uiw) ){
 			uiw = 'generic';
 		}
 		
@@ -71,35 +100,23 @@ exc.components = {
 		if(!def) return null;
 		o.isComponent = true;
 		o._cmpType = def.id;
+		o._cmp = def;
 		o._cmpUID = core.createUID();
 		
 
 		this.componentInit(o);
 		this.decorate(def, o);
 
-		if(typeof(def.init) == "function"){
-			def.init(o);
+		if(typeof(def.instance) == "function"){
+			def.instance(o);
 		}
 		return o;
 	},
 	decorate: function(def, o){
 		
-		var obj;
-		if( def.hasOwnProperty('fn') ){
-			obj = core.extend({}, this.defaultBehavior, def.fn);
-		}else{
-			obj = core.extend({}, this.defaultBehavior);
-		}
-		
-		if( def.hasOwnProperty('inherits') ){
-			for(i=0; i<def.inherits.length;i++){
-				var k = def.inherits[i];
-				if(!this.items.hasOwnProperty(k)) continue;
-				if(!this.items[k].hasOwnProperty('fn')) continue;
-				core.extend(obj, this.items[k].fn);
-			}
-		}
+		var obj = core.extend({}, def.behavior);
 
+		//extend prototype
 		Object.setPrototypeOf(obj, Object.getPrototypeOf(o));
 		Object.setPrototypeOf(o, obj);
 
@@ -193,7 +210,7 @@ exc.components = {
 	},
 	renderComponents: function(selector){
 		var parent = $.get(selector);
-		var items = parent.find("[data-cmp]");
+		var items = parent.find("w");
 
 		if(!items || (items.length <= 0)) return;
 
@@ -245,8 +262,10 @@ exc.components = {
 					df.appendChild(o);
 				});
 				entry.o.parentNode.replaceChild(df, entry.o);
-			}else{
+			}else if(t){
 				entry.o.parentNode.replaceChild(t, entry.o);
+			}else{
+
 			}
 
 			if(!t) return;
@@ -303,12 +322,16 @@ exc.components = {
 			exc.expansions.apply(list[i]);
 		}
 		
-		
 		return list;
 	},
 	componentInit: function(cmp){
 	
 
+	},
+	eventTriggerChange: function(o, value){
+		var e = new Event("change", {bubbles: true, cancelable: false, view: window});
+		e.value = value;
+		o.dispatchEvent(e);
 	},
 	sendMessage: function(o, msg){
 		var e = new Event("excm", {bubbles: true, cancelable: false, view: window});
@@ -329,6 +352,7 @@ exc.components = {
 		var e = {  ///NST:IGNORE
 			name:"generic",
 			type:"generic",
+			node: undefined,
 			properties: {},
 			hasProperty: function(n){  ///NST:IGNORE
 				return (this.properties.hasOwnProperty(n)) ? true : false;
@@ -336,6 +360,18 @@ exc.components = {
 			removeProperty: function(n){ ///NST:IGNORE
 				if(this.properties.hasOwnProperty(n)) delete this.properties[n];
 				return this;
+			},
+			hasAttr: function(n){ ///NST:IGNORE
+				if(this.properties.hasOwnProperty("attr") && this.properties.attributes.hasOwnProperty(n)){
+					return true;
+				}
+				return false;
+			},
+			attr: function(n){ ///NST:IGNORE
+				if(this.properties.hasOwnProperty("attr") && this.properties.attributes.hasOwnProperty(n)){
+					return this.properties.attributes[n];
+				}
+				return undefined;
 			},
 			property: function(n,v){ ///NST:IGNORE
 				var p = this.properties;
@@ -360,8 +396,13 @@ exc.components = {
 		var i = 0, k ='';
 		
 		if( any.nodeType ){
-			prop = any.getAttribute("data-cmp");
-			prop = JSON.parse(prop);
+			e.node = any;
+			prop = any.getAttribute("type");
+			if(prop.substr(0,1) == '{'){
+				prop = JSON.parse(prop);
+			}else{
+				prop = {type: prop};
+			}
 			if(typeof(prop) != "object"){
 				prop = {};
 			}
@@ -370,7 +411,6 @@ exc.components = {
 			if(!prop.hasOwnProperty("attributes")) prop.attributes = {}; ///NST:IGNORE
 		
 			var al = $.getAttr(any);
-			//console.log("attr %o", al);
 			for(k in al){
 				if(k == "class"){
 					prop.classes = al[k].split(/\s+/);
@@ -426,6 +466,48 @@ exc.components = {
 		magic: function(){
 			console.log("called magic");
 		},
+		bindTo: function(obj, name){
+			if(typeof(obj)!= "object") return this;
+
+			
+			if(this._isBinded) return;
+			console.log("@bindTo field=%s", name);
+			var _me = this;
+			this._isBinded = true;
+			this.addEventListener("change", function(e){
+				console.log("@change for bindTo Control %o", e.target);
+				console.log("@change me= %o", _me);
+				var v;
+				if(core.isCallable("getValue", _me)){
+					console.log("@change implements getValue");
+					v = _me.getValue();
+				}else if(_me instanceof HTMLInputElement){
+					console.log("@change using native value");
+					v = _me.value;
+				}
+
+				obj[name] = v;
+			});
+
+			var _value = (obj.hasOwnProperty(name)) ? obj[name] : undefined;
+			var propValue = {enumerable: false};
+			propValue.set  = function(newValue){
+				if(core.isCallable("setValue", _me)){
+					console.log("@prop[%s].setter implements setValue", name);
+					_me.setValue(newValue);
+				}else if(_me instanceof HTMLInputElement){
+					console.log("@prop[%s].setter using native value", name);
+					_me.value = newValue;
+				}
+
+				_value = newValue;
+			};
+			propValue.get  = function(){
+				return _value;
+			};
+
+			Object.defineProperty(obj, name, propValue);
+		}
 	},
 	installValueInterface: function(elm, vs, def){
 		var vp;
@@ -437,8 +519,8 @@ exc.components = {
 
 		elm._vsCBO = false; //Changed By Owner Flag
 
-		if( (typeof(vs) == "string") && exc.components.vs.hasOwnProperty(vs) ){
-			vp = exc.components.vs[vs]; //use a built in value setter/getter
+		if( (typeof(vs) == "string") && this.vi.hasOwnProperty(vs) ){
+			vp = this.vi[vs]; //use a built in value setter/getter
 		}else if( (typeof(vs) == "object") ){
 			vp = vs;
 		}
@@ -531,7 +613,7 @@ exc.components = {
 			};
 		}
 	},
-	vs : { //value source,
+	vi : { //value source,
 		attr: {
 			setter : function(elm, v){
 				elm.attr('data-uiw-value', v);

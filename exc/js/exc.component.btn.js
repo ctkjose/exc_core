@@ -16,6 +16,12 @@ exc.components.register({ ///NST:MARK:CLASS:button
 		o.attr( "role", 'button' );
 
 		var h = "";
+		if(e.hasOwnProperty("contents")){
+			if(typeof(e.contents) == "string"){
+				h = e.contents;
+			}
+		}
+
 		if( e.hasProperty("caption") ) h = e.property("caption");
 		if(h.length > 0){
 			$.append(o,h);
@@ -63,16 +69,16 @@ exc.components.register({ ///NST:MARK:CLASS:button
 		return o;
 	},
 	renderCompleted: function(o){
-		if(!$.hasAction(o, {event:"click",name:"publishOnClick",handler:"handler"})){
-			var fn = function(e){ //static callback
-				var o = $.fromEvent(e, "[data-uiw]");
-				if(o.hasClass('is-disabled')) return;
-
-				var msg = $.name(o) + "_click";
-				//app.publish(msg, {'cmd':msg, 'event': e});
-				 exc.components.sendMessage(o, msg, {'cmd':msg, 'event': e});
-			};
-			$.onAction(o, "click.publishOnClick", fn);
-		}
+		//if(!$.hasAction(o, {event:"click",name:"publishOnClick",handler:"handler"})){
+		//	var fn = function(e){ //static callback
+		//		var o = $.fromEvent(e, "[data-uiw]");
+		//		if(o.hasClass('is-disabled')) return;
+		//
+		//		var msg = $.name(o) + "_click";
+		//		//app.publish(msg, {'cmd':msg, 'event': e});
+		//		 exc.components.sendMessage(o, msg, {'cmd':msg, 'event': e});
+		//	};
+		//	$.onAction(o, "click.publishOnClick", fn);
+		//}
 	},
 });

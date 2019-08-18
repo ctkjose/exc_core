@@ -300,14 +300,14 @@ exc.ds = {
  *  Use addObserverForKey/removeObserverForKey to listen for changes on a particular key.
  *  A notification callback has the signature aCallback(aValueCollection, keyName, cookie).
  * 
- * @param item a plain object to convert to a ValueCollection
+ * @param item a plain object with initial values, or array of keys
  * @returns an instance of a valueCollection
  * 
 */
 exc.ds.makeValueCollection = function(item){
 	var out = {};
 	var observers = [];
-	var keys = Object.keys(item);
+	var keys = (item && Array.isArray(item)) ? item : (item && (typeof(item)=="object") ? Object.keys(item) : []);
 
 	function createProperty(obj, keyName, initialValue){
 		var value = initialValue;
@@ -357,11 +357,11 @@ exc.ds.makeValueCollection = function(item){
 			});
 			return this;
 		},
-		subscribe: function(callback, cookie){
+		addObserver: function(callback, cookie){
 			observers.push([callback, null, cookie]);
 			return this;
 		},
-		unsubscribe: function(callback){
+		removeObserver: function(callback){
 			observers = observers.filter(function(efn){
 				return efn[0] != callback;
 			});
@@ -416,11 +416,16 @@ exc.ds.makeValueCollection = function(item){
 
 	out.__proto__ = proto;
 
-	keys.forEach(function(k){
-		createProperty(out, k, item[k]);
-	});
 	
+
+	keys.forEach(function(k){
+		var v = (item && (typeof(item)=="object")) ? item[k] : undefined;
+		createProperty(out, k, v);
+	});
+
+
 	return out;
+
 
 };
 exc.ds.makeValueStore = function(aValue, options){
